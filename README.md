@@ -1,1 +1,0 @@
-# docker-para-nao-esquecer
