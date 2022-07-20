@@ -1,7 +1,18 @@
 # FRONT E BACK DEVEM TER SEU PROPRIO DOCKERFILE
 
+# adicionar traefik em producao
+
+#https://doc.traefik.io/traefik/user-guides/docker-compose/basic-example/
+#https://traefik.io/blog/traefik-2-0-docker-101-fc2893944b9d/
+#https://www.digitalocean.com/community/tutorials/how-to-use-traefik-v2-as-a-reverse-proxy-for-docker-containers-on-ubuntu-20-04
+
+# adicionar traefik em producao
+
+
 version: '3.8'
 services:
+
+
   web:
     build: ./frontend
     container_name: web
@@ -12,6 +23,8 @@ services:
       - 80:3000
     volumes:
       - ./frontend:/app
+
+
   api:
     build: ./backend
     container_name: api
@@ -21,13 +34,15 @@ services:
     ports:
       - 3001:3001
     environment:
-      DB_HOST: db
-      DB_USER: root
-      DB_PASSWORD: root
-      DB_NAME: db
-      DB_PORT: 3306
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_DATABASE}
+      DB_PORT: ${DB_PORT}
     volumes: 
       - ./backend:/app
+
+
   db:
     image: mysql:8.0
     container_name: db
@@ -35,9 +50,11 @@ services:
     ports:                                                                                                              
       - 3306:3306
     environment: 
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: db
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
     volumes:
       - mysql-data:/var/lib/mysql
+
+
 volumes:
   mysql-data:
